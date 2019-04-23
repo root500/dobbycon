@@ -1,6 +1,6 @@
-# dobbycon
+# 명품도비콘 생성기
 
-> A Vue.js project
+> 명품님께 충성충성충성 ^^7
 
 ## Build Setup
 
