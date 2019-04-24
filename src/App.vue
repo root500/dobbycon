@@ -1,6 +1,5 @@
 <template>
   <div id="app" class="app">
-    <div class="dummy"></div>
     <section class="window">
       <div class="window-inner">
         <header class="header">
@@ -20,8 +19,16 @@
             </div>
           </div>
         </header>
+
         <div class="content">
-          <message ref="message" :says="says"/>
+          <message ref="message" :profile="profiles[parseInt(profile)]" :says="says"/>
+        </div>
+
+        <div class="profiles">
+          <template v-for="(item, index) in profiles">
+            <input v-model="profile" :id="item.name" type="radio" :value="index" :true-value="index === profile">
+            <label :for="item.name">{{ item.label }}</label>
+          </template>
         </div>
         <div class="controls">
           <textarea v-model="saysText" cols="30" rows="10" class="controls-text"></textarea>
@@ -48,6 +55,13 @@
           members: 23,
         },
 
+        profiles: [
+          { name: 'dobby', label: '도비', nickname: 'Stereo', sub: 'card' },
+          { name: 'dugi', label: '더기', nickname: '더기더기' },
+          { name: 'viny', label: '비니', nickname: '서경빈', sub: 'master' },
+        ],
+
+        profile: '0',
         saysText: '도비는 이제 자유에요',
       }
     },
@@ -56,6 +70,9 @@
       says() {
         return this.saysText.split('\n');
       }
+    },
+
+    created() {
     },
 
     methods: {
@@ -83,22 +100,6 @@
   img {
     max-width: 100%;
     height: auto;
-  }
-  .dummy {
-    display: none;
-    position: absolute;
-    left: 20px;
-    top: 45px;
-    background: url("/static/screenshot.png") no-repeat;
-    width: 100%;
-    height: 100%;
-    background-size: (1460px / 2) (1636px / 2);
-    opacity: 0.5;
-    z-index: 1;
-
-    &:hover {
-      opacity: 0;
-    }
   }
   .app {
     position: fixed;
@@ -204,15 +205,21 @@
 
     .content {
       flex: 1;
+    }
 
-      .message {
-        /*margin-top: 184px;*/
+    .profiles {
+      padding: 10px;
+      border-top: 1px solid #e2e2e2;
+      background-color: #f7f7f7;
+
+      > label {
+        margin-right: 10px;
       }
     }
 
     .controls {
       position: relative;
-      border-top: 1px solid #dcdcdc;
+      border-top: 1px solid #e2e2e2;
       background-color: $white;
       height: 93px;
 

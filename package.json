@@ -12,6 +12,7 @@
   "dependencies": {
     "canvas-to-image": "^2.0.2",
     "fabric": "^2.7.0",
+    "lodash": "^4.17.11",
     "normalize.css": "^8.0.1",
     "vue": "^2.5.2"
   },
