@@ -225,6 +225,10 @@
           name: this.says[0],
           type: 'png'
         });
+      },
+
+      toDataUrl() {
+        return this.$refs.canvas.toDataURL();
       }
     },
   }

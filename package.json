@@ -14,7 +14,8 @@
     "fabric": "^2.7.0",
     "lodash": "^4.17.11",
     "normalize.css": "^8.0.1",
-    "vue": "^2.5.2"
+    "vue": "^2.5.2",
+    "vue-plugin-load-script": "^1.2.0"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",

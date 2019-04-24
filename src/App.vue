@@ -33,6 +33,8 @@
               <span>{{ item.label }}</span>
             </label>
           </template>
+
+          <button ref="shareKakao" @click="sendKakaoLink">Kakao</button>
         </div>
         <div class="controls">
           <textarea title="message" v-model="saysText" cols="30" rows="10" class="controls-text"></textarea>
@@ -46,6 +48,8 @@
 <script>
   import Message from './components/Message';
 
+  const API_KEY = '7a4daa3279f41d28c739c64da6fc6140';
+
   export default {
     name: 'App',
     components: {
@@ -54,6 +58,8 @@
 
     data() {
       return {
+        isKakaoInit: false,
+
         meta: {
           title: '명품도비콘 생성기',
           members: 23,
@@ -85,9 +91,28 @@
     },
 
     created() {
+      this.$loadScript('//developers.kakao.com/sdk/js/kakao.min.js')
+        .then(this.initKakao);
     },
 
     methods: {
+      initKakao() {
+        Kakao.init(API_KEY);
+
+        this.isKakaoInit = true;
+      },
+
+      sendKakaoLink() {
+        Kakao.Link.sendCustom({
+          templateId: 16008,
+          templateArgs: {
+            title: `${this.profiles[parseInt(this.profile)].nickname} 님의 메시지`,
+            desc: this.says[0],
+            image: this.$refs.message.toDataUrl(),
+          }
+        });
+      },
+
       saveToImg() {
         gtag('event', 'save', {
           'event_category': this.says[0],
