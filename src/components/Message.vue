@@ -149,8 +149,8 @@
           this.canvas.remove(obj);
         });
 
-        this.says.forEach(say => {
-          if(!say) return;
+        this.says.forEach((say, index) => {
+          if(!say && index > 0) return;
 
           let height;
 
