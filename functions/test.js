@@ -1,6 +1,11 @@
 exports.handler = function(event, context, callback) {
+
+
   callback(null, {
     statusCode: 200,
-    body: "Hello, World"
+    headers: {
+      'Content-Type': 'image/png'
+    },
+    body: data,
   });
 };
