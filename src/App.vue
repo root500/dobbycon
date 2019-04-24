@@ -103,6 +103,9 @@
       },
 
       sendKakaoLink() {
+        const imgData = this.$refs.message.toDataUrl();
+        this.axios.post('/.netlify/functions/save', imgData);
+
         Kakao.Link.sendCustom({
           templateId: 16008,
           templateArgs: {
