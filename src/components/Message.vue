@@ -1,6 +1,6 @@
 <template>
   <div class="message">
-    <canvas id="message-canvas" ref="canvas" class="message-canvas" height="300"></canvas>
+    <canvas id="message-canvas" ref="canvas" class="message-canvas"></canvas>
   </div>
 </template>
 
@@ -22,12 +22,7 @@
       },
       says: {
         type: Array,
-        default: () => [
-          '도비는 이제 자유에요',
-          '넵 도비',
-          '???',
-          '월월월',
-        ],
+        default: () => [],
       }
     },
 
@@ -44,8 +39,18 @@
       this.$nextTick(this.draw);
     },
 
+    watch: {
+      says() {
+        this.$nextTick(this.draw);
+      }
+    },
+
     methods: {
       draw() {
+
+        const OFFSET_X = 10;
+        const OFFSET_Y = 10;
+
         const PROFILE_SIZE = 36;
 
         const SAY_LEFT = 48;
@@ -54,10 +59,10 @@
         const SAY_TEXT_VPAD = 8;
 
         const fontFamily = "'Helvetica Neue', 'Apple SD Gothic Neo'";
+        const nickname = new fabric.Text(this.nickname);
 
         let lastSayTop = SAY_TOP;
-
-        const nickname = new fabric.Text(this.nickname);
+        let maxWidth = 0;
 
         let profile;
         let arrow;
@@ -70,8 +75,8 @@
         fabric.Image.fromURL(`/static/img/${this.profile}.jpg`, img => {
           profile = img;
           profile.set({
-            left: 0,
-            top: 0,
+            left: OFFSET_X,
+            top: OFFSET_Y,
           });
           profile.scaleToWidth(PROFILE_SIZE);
           profile.scaleToHeight(PROFILE_SIZE);
@@ -80,8 +85,8 @@
         });
 
         nickname.set({
-          left: PROFILE_SIZE + 9,
-          top: 2,
+          left: OFFSET_X + PROFILE_SIZE + 9,
+          top: OFFSET_Y + 2,
           fill: '#4c555a',
           fontSize: 13,
           fontFamily,
@@ -92,8 +97,9 @@
         fabric.Image.fromURL('/static/img/say-arrow.png', img => {
           arrow = img;
           arrow.set({
-            left: SAY_LEFT - 6,
-            top: SAY_TOP + 6,
+            left: OFFSET_X + SAY_LEFT - 6,
+            top: OFFSET_Y + SAY_TOP + 6,
+            selectable: false,
           });
           arrow.scaleToWidth(14 / 2);
           arrow.scaleToHeight(18 / 2);
@@ -106,8 +112,8 @@
           let height;
 
           const text = new fabric.Text(say, {
-            left: SAY_LEFT + SAY_TEXT_HPAD,
-            top: lastSayTop + SAY_TEXT_VPAD + 1,
+            left: OFFSET_X + SAY_LEFT + SAY_TEXT_HPAD,
+            top: OFFSET_Y + lastSayTop + SAY_TEXT_VPAD + 1,
             fill: '#000',
             fontSize: 13,
             fontFamily,
@@ -116,8 +122,8 @@
           height = parseInt(text.height) + SAY_TEXT_VPAD * 2;
 
           const textBox = new fabric.Rect({
-            left: SAY_LEFT,
-            top: lastSayTop,
+            left: OFFSET_X + SAY_LEFT,
+            top: OFFSET_Y + lastSayTop,
             width: parseInt(text.width) + SAY_TEXT_HPAD * 2,
             height,
             fill: '#fff',
@@ -130,6 +136,11 @@
               offsetY: 1,
             }),
           });
+
+          if(maxWidth < textBox.width) {
+            console.log(textBox.width);
+            maxWidth = textBox.width;
+          }
 
           this.canvas.add(textBox);
           this.canvas.add(text);
@@ -144,6 +155,8 @@
           obj.selectable = false;
         });
 
+        this.canvas.setWidth((OFFSET_X * 2) + SAY_LEFT + maxWidth);
+        this.canvas.setHeight((OFFSET_Y * 2) + lastSayTop);
         this.canvas.renderAll();
       },
 
@@ -152,10 +165,6 @@
           name: this.says[0],
           type: 'png'
         });
-        // const downloader = this.$refs.downloader;
-        //
-        // downloader.download = "image.png";
-        // downloader.href = this.$refs.canvas.toDataURL("image/png").replace(/^data:image\/[^;]/, 'data:application/octet-stream');
       }
     },
   }
@@ -167,15 +176,9 @@
   .message {
     display: flex;
 
-    &-profile {
-      $size: 36px;
-
-      overflow: hidden;
-      width: $size;
-      height: $size;
-      mask-image: url(/static/img/profile-mask.png);
-      mask-size: contain;
-      box-shadow: inset 0 0 5px 1px rgba($black, 0.3);
+    &-canvas {
+      width: 100%;
+      height: 100%;
     }
 
     &-downloader {

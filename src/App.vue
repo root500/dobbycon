@@ -21,10 +21,11 @@
           </div>
         </header>
         <div class="content">
-          <message ref="message"/>
+          <message ref="message" :says="says"/>
         </div>
         <div class="controls">
-          <button @click="saveToImg">Save</button>
+          <textarea v-model="saysText" cols="30" rows="10" class="controls-text"></textarea>
+          <button @click="saveToImg" class="controls-save">저장</button>
         </div>
       </div>
     </section>
@@ -32,7 +33,7 @@
 </template>
 
 <script>
-  import Message from './components/message';
+  import Message from './components/Message';
 
   export default {
     name: 'App',
@@ -43,10 +44,17 @@
     data() {
       return {
         meta: {
-          // title: '개발 못하는 잉여들 잡담방',
-          title: '명품 도비콘 제작기',
+          title: '명품도비콘 생성기',
           members: 23,
         },
+
+        saysText: '도비는 이제 자유에요',
+      }
+    },
+
+    computed: {
+      says() {
+        return this.saysText.split('\n');
       }
     },
 
@@ -119,6 +127,8 @@
     }
 
     &-inner {
+      display: flex;
+      flex-direction: column;
       flex: 1;
       overflow: hidden;
       border-radius: 6px;
@@ -193,11 +203,46 @@
     }
 
     .content {
-      .message {
-        margin-left: 10px;
-        margin-top: 15px;
+      flex: 1;
 
+      .message {
         /*margin-top: 184px;*/
+      }
+    }
+
+    .controls {
+      position: relative;
+      border-top: 1px solid #dcdcdc;
+      background-color: $white;
+      height: 93px;
+
+      &-text {
+        border: 0;
+        padding: 10px;
+        padding-right: (80px + 12px + 15px);
+        width: 100%;
+        height: 100%;
+        font-size: 1.4rem;
+        box-sizing: border-box;
+        resize: none;
+
+        &:focus {
+          outline: 0;
+        }
+      }
+      &-save {
+        position: absolute;
+        right: 14px;
+        top: 12px;
+        bottom: 12px;
+        width: 80px;
+        font-size: 1.4rem;
+        text-align: center;
+        background-color: #fee333;
+        border: 1px solid #f1d730;
+        border-radius: 4px;
+        -webkit-appearance: none;
+        cursor: pointer;
       }
     }
   }
