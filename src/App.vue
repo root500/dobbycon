@@ -10,7 +10,9 @@
           </div>
 
           <div class="header-content">
-            <div class="members"></div>
+            <div class="members">
+              <img2x src="/members.png"/>
+            </div>
             <div class="meta">
               <h1 class="meta-title">{{ meta.title }}</h1>
               <div class="meta-members">
@@ -26,12 +28,14 @@
 
         <div class="profiles">
           <template v-for="(item, index) in profiles">
-            <input v-model="profile" :id="item.name" type="radio" :value="index" :true-value="index === profile">
-            <label :for="item.name">{{ item.label }}</label>
+            <label>
+              <input v-model="profile" type="radio" :value="index" :true-value="index === profile">
+              <span>{{ item.label }}</span>
+            </label>
           </template>
         </div>
         <div class="controls">
-          <textarea v-model="saysText" cols="30" rows="10" class="controls-text"></textarea>
+          <textarea title="message" v-model="saysText" cols="30" rows="10" class="controls-text"></textarea>
           <button @click="saveToImg" class="controls-save">저장</button>
         </div>
       </div>
@@ -72,11 +76,23 @@
       }
     },
 
+    watch: {
+      profile(val) {
+        gtag('event', 'changeProfile', {
+          'event_category': this.profiles[parseInt(val)].name
+        });
+      }
+    },
+
     created() {
     },
 
     methods: {
       saveToImg() {
+        gtag('event', 'save', {
+          'event_category': this.says[0],
+        });
+
         this.$refs.message.save();
       },
     }
@@ -92,7 +108,7 @@
   }
   body {
     position: relative;
-    font-family: 'Helvetica Neue', 'Apple SD Gothic Neo';
+    font-family: 'Helvetica Neue', 'Apple SD Gothic Neo', sans-serif;
   }
   h1 {
     margin: 0;
@@ -198,7 +214,7 @@
       @each $name, $color in $colors {
         &--#{$name} {
           background-color: $color;
-          border-color: darken($color, 5%);
+          border-color: darken($color, 7%);
         }
       }
     }
@@ -211,6 +227,7 @@
       padding: 10px;
       border-top: 1px solid #e2e2e2;
       background-color: #f7f7f7;
+      font-size: 1.2rem;
 
       > label {
         margin-right: 10px;

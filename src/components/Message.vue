@@ -105,6 +105,7 @@
             left: OFFSET_X,
             top: OFFSET_Y,
             clipPath: new fabric.Path('M0-36c-26.28,0-36,9.72-36,36s9.72,36,36,36S36,26.28,36,0,26.28-36,0-36Z'),
+            selectable: false,
           });
           img.scaleToWidth(PROFILE_SIZE, true);
           img.scaleToHeight(PROFILE_SIZE, true);
@@ -124,6 +125,7 @@
             img.set({
               left: OFFSET_X + 25,
               top: OFFSET_Y + 20,
+              selectable: false,
             });
             img.scaleToWidth(PROFILE_SUB_SIZE, true);
             img.scaleToHeight(PROFILE_SUB_SIZE, true);
