@@ -33,11 +33,9 @@
               <span>{{ item.label }}</span>
             </label>
           </template>
-
-          <button ref="shareKakao" @click="sendKakaoLink">Kakao</button>
         </div>
         <div class="controls">
-          <textarea title="message" v-model="saysText" cols="30" rows="10" class="controls-text"></textarea>
+          <textarea title="message" v-model="saysText" @change="isEdited = true" cols="30" rows="10" class="controls-text"></textarea>
           <button @click="saveToImg" class="controls-save">저장</button>
         </div>
       </div>
@@ -48,8 +46,6 @@
 <script>
   import Message from './components/Message';
 
-  const API_KEY = '7a4daa3279f41d28c739c64da6fc6140';
-
   export default {
     name: 'App',
     components: {
@@ -58,7 +54,7 @@
 
     data() {
       return {
-        isKakaoInit: false,
+        isEdited: false,
 
         meta: {
           title: '명품도비콘 생성기',
@@ -66,9 +62,10 @@
         },
 
         profiles: [
-          { name: 'dobby', label: '도비', nickname: 'Stereo', sub: 'card' },
-          { name: 'dugi', label: '더기', nickname: '더기더기' },
-          { name: 'viny', label: '비니', nickname: '서경빈', sub: 'master' },
+          { name: 'dobby', label: '도비', nickname: 'Stereo', say: '도비는 이제 자유에요', sub: 'card' },
+          { name: 'dugi', label: '더기', nickname: '더기더기', say: '더기도 퇴근하고 싶당', sub: 'card' },
+          { name: 'viny', label: '비니', nickname: '서경빈', say: '핵도비 나와라', sub: 'master' },
+          { name: 'poo', label: '푸라맹', nickname: '안티푸라면', say: '살려죠' },
         ],
 
         profile: '0',
@@ -84,38 +81,19 @@
 
     watch: {
       profile(val) {
+        const profile = this.profiles[parseInt(val)];
+
+        if(!this.isEdited) {
+          this.saysText = profile.say;
+        }
+
         gtag('event', 'changeProfile', {
-          'event_category': this.profiles[parseInt(val)].name
+          'event_category': profile.name
         });
       }
     },
 
-    created() {
-      this.$loadScript('//developers.kakao.com/sdk/js/kakao.min.js')
-        .then(this.initKakao);
-    },
-
     methods: {
-      initKakao() {
-        Kakao.init(API_KEY);
-
-        this.isKakaoInit = true;
-      },
-
-      sendKakaoLink() {
-        const imgData = this.$refs.message.toDataUrl();
-        this.axios.post('/.netlify/functions/save', imgData);
-
-        Kakao.Link.sendCustom({
-          templateId: 16008,
-          templateArgs: {
-            title: `${this.profiles[parseInt(this.profile)].nickname} 님의 메시지`,
-            desc: this.says[0],
-            image: this.$refs.message.toDataUrl(),
-          }
-        });
-      },
-
       saveToImg() {
         gtag('event', 'save', {
           'event_category': this.says[0],
