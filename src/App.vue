@@ -62,7 +62,7 @@
         },
 
         profiles: [
-          { name: 'dobby', label: '도비', nickname: 'Stereo', say: '도비는 이제 자유에요', sub: 'card' },
+          { name: 'dobby', label: '도비', nickname: 'Stereo', say: '도비는 이제 자유에요' },
           { name: 'dugi', label: '더기', nickname: '더기더기', say: '더기도 퇴근하고 싶당', sub: 'card' },
           { name: 'viny', label: '비니', nickname: '서경빈', say: '핵도비 나와라', sub: 'master' },
           { name: 'poo', label: '푸라맹', nickname: '안티푸라면', say: '살려죠' },
