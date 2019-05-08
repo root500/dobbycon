@@ -202,8 +202,8 @@
 
           this.texts.push(textBox, text);
 
-          textBox.moveTo(2);
-          text.moveTo(3);
+          textBox.moveTo(3);
+          text.moveTo(4);
 
           lastSayTop += height + 6;
         });
