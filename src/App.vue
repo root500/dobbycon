@@ -107,7 +107,6 @@
 
 <style lang="scss">
   @import "assets/lib";
-  @import "~normalize.css";
 
   html {
     font-size: 62.5%;

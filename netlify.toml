@@ -1,3 +1,6 @@
 [build]
   command = "yarn install && yarn run build"
   functions = "functions"
+
+[build.environment]
+  NODE_VERSION = "18"
